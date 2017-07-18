@@ -1,4 +1,0 @@
-Django==1.8.17
-django-hstore==1.4.2
-psycopg2==2.7.1
-wsgiref==0.1.2
