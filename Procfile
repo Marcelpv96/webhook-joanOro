@@ -1,2 +1,2 @@
-web: gunicorn JoanOro.wsgi --log-file -
-worker: python JoanOro/manage.py runserver
+web: gunicorn gettingstarted.wsgi --log-file -
+
