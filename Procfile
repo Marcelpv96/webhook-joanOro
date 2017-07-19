@@ -1,1 +1,1 @@
-web: gunicorn JoanOro/JoanOro.wsgi --log-file -
+web: gunicorn JoanOro.wsgi --log-file -
