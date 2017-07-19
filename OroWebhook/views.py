@@ -11,4 +11,8 @@ from .models import WebhookTransaction
 @require_POST
 def webhook(request):
 
-    return HttpResponse(status=200)
+    return {
+        "speech": "a",
+        "displayText": "a",
+        "source": "API.AI-test-simple-Quiz"
+    }
