@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class Question(models.Model):
     Question = models.TextField(null=False)
-
+    QuestionTopic = models.TextField(null=True)
     def __unicode__(self):
         return u'{0}'.format(self.Question)
 
