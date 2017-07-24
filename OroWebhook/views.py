@@ -10,7 +10,7 @@ from django.core import serializers
 @require_POST
 def webhook(request):
     request_data = json.loads(request)[0]
-    try:
+    """try:
         result = {
             "speech": request_data['result']['action'],
             "displayText": request_data['result']['action'],
@@ -22,4 +22,5 @@ def webhook(request):
             "displayText": "ERROR",
             "source": "API.AI-test-simple-Quiz"
         }
+        """
     return JsonResponse({"_hla_":"adeu"})
