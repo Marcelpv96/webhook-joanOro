@@ -12,7 +12,7 @@ from django.core import serializers
 def webhook(request):
     request_data = json.loads(request)[0]
     return JsonResponse({
-        "speech": request['result']['action'],
-        "displayText": request['result']['action'],
+        "speech": request_data['result']['action'],
+        "displayText": request_data['result']['action'],
         "source": "API.AI-test-simple-Quiz"
     })
