@@ -16,7 +16,7 @@ def webhook(request):
             "displayText": request_data['result']['action'],
             "source": "API.AI-test-simple-Quiz"
         }
-    except KeyError:
+    except :
         result = {
             "speech": "ERROR",
             "displayText": "ERROR",
