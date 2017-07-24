@@ -9,6 +9,7 @@ from django.core import serializers
 @csrf_exempt
 @require_POST
 def webhook(request):
+    print request.body
     """try:
         result = {
             "speech": request_data['result']['action'],
