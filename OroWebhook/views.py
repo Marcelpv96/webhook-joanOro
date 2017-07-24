@@ -10,8 +10,9 @@ from django.core import serializers
 @csrf_exempt
 @require_POST
 def webhook(request):
+    request_data = json.loads(request)[0]
     return JsonResponse({
-        "speech": "a",
-        "displayText": "a",
+        "speech": request['result']['action'],
+        "displayText": request['result']['action'],
         "source": "API.AI-test-simple-Quiz"
     })

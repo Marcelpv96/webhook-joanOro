@@ -3,10 +3,14 @@ from django.utils import timezone
 
 # Create your models here.
 
+class QuestionTopic(models.Model):
+    QuestionTopic = models.TextField(null=False)
+    def __unicode__(self):
+        return u'{0}'.format(self.QuestionTopic)
 
 class Question(models.Model):
     Question = models.TextField(null=False)
-    QuestionTopic = models.TextField(null=True)
+    QuestionTopic = models.ForeignKey(QuestionTopic,null=False)
     def __unicode__(self):
         return u'{0}'.format(self.Question+" || "+self.QuestionTopic)
 
@@ -18,6 +22,7 @@ class Answer(models.Model):
         return u'{0}'.format(self.Answer)
 
 class BadAnswer(models.Model):
+    Question = models.ForeignKey(Question,null=False)
     Answer = models.TextField(null=False)
 
     def  __unicode__(self):
