@@ -11,8 +11,16 @@ from django.core import serializers
 @require_POST
 def webhook(request):
     request_data = json.loads(request)[0]
-    return JsonResponse({
-        "speech": request_data['result']['action'],
-        "displayText": request_data['result']['action'],
-        "source": "API.AI-test-simple-Quiz"
-    })
+    try:
+        result = {
+            "speech": request_data['result']['action'],
+            "displayText": request_data['result']['action'],
+            "source": "API.AI-test-simple-Quiz"
+        }
+    except KeyError:
+        result = {
+            "speech": "ERROR",
+            "displayText": "ERROR",
+            "source": "API.AI-test-simple-Quiz"
+        }
+    return JsonResponse(result)
