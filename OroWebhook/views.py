@@ -7,7 +7,6 @@ from django.http import JsonResponse
 from django.core import serializers
 
 
-@csrf_exempt
 @require_POST
 def webhook(request):
     request_data = json.loads(request)[0]
