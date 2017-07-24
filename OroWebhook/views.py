@@ -22,4 +22,4 @@ def webhook(request):
             "displayText": "ERROR",
             "source": "API.AI-test-simple-Quiz"
         }
-    return JsonResponse(result)
+    return JsonResponse({"_hla_":"adeu"})
