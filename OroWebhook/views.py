@@ -18,17 +18,30 @@ def create_answer(answer):
 def checkQuestion(action):
     return True
 
+def generateAnswerChoosedTest(action):
+    if action == 'choosed_test_Nasa':
+        return create_answer("Correct Answer Nasa, : .......")
+    if action == 'choosed_test_Family':
+        return create_answer("Correct Answer family, : .......")
+    if action == 'choosed_test_Random':
+        return create_answer("Correct Answer Random, : .......")
+
+def generateAnswer(action):
+    if action  == 'choosed_answer_Family':
+        return create_answer("Correct Answer family, Now the question is: .......")
+    if action == 'choosed_answer_Random':
+        return create_answer("Correct Answer random, Now the question is: .......")
+    if action == 'choosed_answer_Nasa':
+        return create_answer("Correct Answer nasa, Now the question is: .......")
+
 def getResult(action):
     try:
-        if action == 'start_test':
+        if action.startswith('start'):
             result = create_answer("Choose the test, say a topic or say Random for a random test.")
-        if action == 'choosed_test':
-            result = create_answer("Ok, the Question now is: ........")
-        if action == 'answer_choosed':
-            if checkQuestion(action):
-                result = create_answer("Correct Answer, Now the question is: .......")
-            else:
-                result = create_answer("Incorrect Answer, the correct is: ......, new Question : ......")
+        if action.startswith('choosed_test'):
+            result = generateAnswerChoosedTest(action)
+        if action.startswith('choosed_answer'):
+            result = generateAnswer(action)
     except :
         result = create_answer("ERRROR")
     return result
