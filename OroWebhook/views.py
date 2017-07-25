@@ -40,7 +40,7 @@ def getResult(action):
             result = create_answer("Choose the test, say a topic or say Random for a random test.")
         if action.startswith('choosed_test'):
             result = generateAnswerChoosedTest(action)
-        if action.startswith('choosed_answer'):
+        if action.startswith('answer_choosed'):
             result = generateAnswer(action)
     except :
         result = create_answer("ERRROR")
