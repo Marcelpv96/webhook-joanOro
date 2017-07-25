@@ -7,3 +7,6 @@ admin.site.register(models.Question)
 admin.site.register(models.Answer)
 admin.site.register(models.BadAnswer)
 admin.site.register(models.APIAIanswer)
+admin.site.register(models.lastQuestion)
+admin.site.register(models.QuestionAndCorrect)
+
