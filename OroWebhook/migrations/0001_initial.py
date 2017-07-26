@@ -28,14 +28,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='BadAnswer',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('Answer', models.TextField()),
-            ],
-        ),
-        migrations.CreateModel(
-            name='lastQuestion',
+            name='LastQuestion',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
             ],
@@ -45,14 +38,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('Question', models.TextField()),
-            ],
-        ),
-        migrations.CreateModel(
-            name='QuestionAndCorrect',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('CorrectAnswer', models.ForeignKey(to='OroWebhook.Answer')),
-                ('Question', models.ForeignKey(to='OroWebhook.Question')),
+                ('Correct', models.TextField()),
+                ('AnswerA', models.ForeignKey(related_name='answer_a', to='OroWebhook.Answer')),
+                ('AnswerB', models.ForeignKey(related_name='answer_b', to='OroWebhook.Answer')),
+                ('AnswerC', models.ForeignKey(related_name='answer_c', to='OroWebhook.Answer')),
             ],
         ),
         migrations.CreateModel(
@@ -73,8 +62,8 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(to='OroWebhook.Question'),
         ),
         migrations.AddField(
-            model_name='badanswer',
-            name='Question',
+            model_name='apiaianswer',
+            name='question',
             field=models.ForeignKey(to='OroWebhook.Question'),
         ),
     ]

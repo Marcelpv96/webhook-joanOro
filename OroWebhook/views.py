@@ -1,10 +1,13 @@
-import copy, json, datetime
+import copy, json, datetime, random
 from django.utils import timezone
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.core import serializers
+
+from models import LastQuestion
+
 
 def create_answer(answer):
     return {
@@ -15,33 +18,33 @@ def create_answer(answer):
 
 
 
-def checkQuestion(action):
+def checkQuestion():
+    #lastQuestion = LastQuestion.objects.filter(testfield=12).order_by('-id')[0]
     return True
 
+def genetareQuestion(topic):
+    return create_answer('QUESTION :'+topic)
+
 def generateAnswerChoosedTest(action):
-    if action == 'choosed_test_Nasa':
-        return create_answer("Correct Answer Nasa, : .......")
-    if action == 'choosed_test_Family':
-        return create_answer("Correct Answer family, : .......")
-    if action == 'choosed_test_Random':
-        return create_answer("Correct Answer Random, : .......")
+    return genetareQuestion('action')
 
 def generateAnswer(action):
-    if action  == 'choosed_answer_Family':
-        return create_answer("Correct Answer family, Now the question is: .......")
-    if action == 'choosed_answer_Random':
-        return create_answer("Correct Answer random, Now the question is: .......")
-    if action == 'choosed_answer_Nasa':
-        return create_answer("Correct Answer nasa, Now the question is: .......")
+    if checkQuestion():
+        result = 'Correct Answer, now the question is : '
+    else:
+        result = 'Incorrect Answer, now the question i : '
+
+    return create_answer(result + ' ...')
+
 
 def getResult(action):
     try:
-        if action.startswith('start'):
+        if action.split('_')[0] == 'start':
             result = create_answer("Choose the test, say a topic or say Random for a random test.")
-        if action.startswith('choosed_test'):
-            result = generateAnswerChoosedTest(action)
-        if action.startswith('answer_choosed'):
-            result = generateAnswer(action)
+        if action.split('_')[0] == 'choosed':
+            result = generateAnswerChoosedTest(action.split('_')[-1])
+        if action.split('_')[0] == 'answer':
+            result = generateAnswer(action.split('_')[-1])
     except :
         result = create_answer("ERRROR")
     return result

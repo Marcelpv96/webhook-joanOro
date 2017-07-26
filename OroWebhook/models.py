@@ -16,25 +16,20 @@ class Answer(models.Model):
 
 class Question(models.Model):
     Question = models.TextField(null=False)
+    AnswerA = models.ForeignKey(Answer,related_name="answer_a",null=False)
+    AnswerB = models.ForeignKey(Answer,related_name="answer_b",null=False)
+    AnswerC = models.ForeignKey(Answer,related_name="answer_c",null=False)
+    Correct = models.TextField(null=False)
     QuestionTopic = models.ForeignKey(QuestionTopic,null=False)
+
+    def generateSpeech(self):
+        return "The question is :"+self.Question+" options:"+self.AnswerA+" "+self.AnswerB+" "+self.AnswerC
+
     def __unicode__(self):
-        return u'{0}'.format(self.Question+" || "+self.QuestionTopic)
-
-class QuestionAndCorrect(models.Model):
-    Question = models.ForeignKey(Question,null=False)
-    CorrectAnswer = models.ForeignKey(Answer,null=False)
-    def __unicode__(self):
-        return u'{0}'.format(self.Question.Question+" <<Correct answer>> "+self.CorrectAnswer.Answer)
-
-
-class BadAnswer(models.Model):
-    Question = models.ForeignKey(Question,null=False)
-    Answer = models.TextField(null=False)
-
-    def  __unicode__(self):
-        return u'{0}'.format(self.Answer)
+        return u'{0}'.format(self.Question+" |a,b,c| "+self.QuestionTopic)
 
 class APIAIanswer(models.Model):
+    question = models.ForeignKey(Question,null=False)
     speech = models.TextField(null=True)
     displayText = models.TextField(null=True)
     source = models.CharField(max_length=20, default='Webhook-JoanOro', editable=False)
@@ -42,8 +37,9 @@ class APIAIanswer(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.speech)
 
-class lastQuestion(models.Model):
+class LastQuestion(models.Model):
     question = models.ForeignKey(Question,null=False)
-
+    def correct(self):
+        return self.question.Correct
     def __unicode__(self):
         return u'{0}'.format(self.question.Question+" |Correct answer >>| ")
