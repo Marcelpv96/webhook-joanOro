@@ -1,4 +1,7 @@
-import copy, json, datetime, random
+import copy
+import json
+import datetime
+import random
 from django.utils import timezone
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -11,26 +14,31 @@ from models import LastQuestion
 
 def create_answer(answer):
     return {
-                "speech": answer,
-                "displayText": answer,
-                "source": "API.AI-test-simple-Quiz"
-            }
+        "speech": answer,
+        "displayText": answer,
+        "source": "API.AI-test-simple-Quiz"
+    }
 
 
+def checkQuestion(optionChoosed):
+    lastQuestion = LastQuestion.objects.filter(testfield=12).order_by('-id')[0]
+    LastQuestion.objects.filter(testfield=12).order_by('-id')[0].delete()
+    return lastQuestion.correct() == optionChoosed
 
-def checkQuestion():
-    #lastQuestion = LastQuestion.objects.filter(testfield=12).order_by('-id')[0]
-    return True
 
 def genetareQuestion(topic):
-    return create_answer('QUESTION :'+topic)
+    return create_answer('QUESTION :' + topic)
 
-def generateAnswerChoosedTest(action):
+
+def generateQuestionChoosedTest(action):
     return genetareQuestion('action')
 
-def generateAnswer(action):
+
+def generateQuestion(topic):
     if checkQuestion():
         result = 'Correct Answer, now the question is : '
+        questionGenerated = generateQuestion(topic)
+        lastQuestion = LastQuestion(question=questionGenerated)
     else:
         result = 'Incorrect Answer, now the question i : '
 
@@ -40,14 +48,26 @@ def generateAnswer(action):
 def getResult(action):
     try:
         if action.split('_')[0] == 'start':
-            result = create_answer("Choose the test, say a topic or say Random for a random test.")
-        if action.split('_')[0] == 'choosed':
-            result = generateAnswerChoosedTest(action.split('_')[-1])
+            result = create_answer(
+                "Choose the test, say a topic or say Random for a random test.")
+        if action.split('_')[0] == 'test':
+            result = generateQuestionChoosedTest(action.split('_')[-1])
         if action.split('_')[0] == 'answer':
-            result = generateAnswer(action.split('_')[-1])
-    except :
+            result = generateQuestion(action.split('_')[-1])
+    except:
         result = create_answer("ERRROR")
     return result
+
+
+def userChoosed(request_data):
+    user_answered = request_data['result']['resolvedQuery'].split()
+    if 'A' in user_answered:
+        return 'A'
+    if 'B' in user_answered:
+        return 'B'
+    if 'C' in user_answered:
+        return 'C'
+    return 'NO ANSWER'
 
 
 @csrf_exempt
@@ -55,5 +75,6 @@ def getResult(action):
 def webhook(request):
     request_data = json.loads(request.body)
     action = request_data['result']['action']
+    optionChoosed = userChoosed(request_data)
     result = getResult(action)
     return JsonResponse(result)
