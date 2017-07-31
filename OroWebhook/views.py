@@ -55,16 +55,14 @@ def generateQuestion(topic,optionChoosed ):
 
 
 def getResult(action, optionChoosed):
-    try:
-        if action.split('_')[0] == 'start':
-            result = create_webhook_answer(
-                "Choose the test, say a topic or say Random for a random test.")
-        if action.split('_')[0] == 'test':
-            result = generateQuestionChoosedTest(action.split('_')[-1])
-        if action.split('_')[0] == 'answer':
-            result = generateQuestion(action.split('_')[-1],optionChoosed)
-    except:
-        result = create_webhook_answer("ERRROR")
+    result = create_webhook_answer("ERRROR")
+    if action.split('_')[0] == 'start':
+        result = create_webhook_answer(
+            "Choose the test, say a topic or say Random for a random test.")
+    if action.split('_')[0] == 'test':
+        result = generateQuestionChoosedTest(action.split('_')[-1])
+    if action.split('_')[0] == 'answer':
+        result = generateQuestion(action.split('_')[-1],optionChoosed)
     return result
 
 
