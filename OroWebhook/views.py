@@ -29,9 +29,10 @@ def checkQuestion(optionChoosed):
 
 
 def chooseQuestionByTopic(topic):
+    return "holagolagola"
+
     questionsByTopic = Question.objects.filter(
         questionTopic=topic).order_by('id')
-    return "holagolagola"
     question = questionsByTopic[random.randint(0, len(questionsByTopic) - 1)]
     return "holagolagola"
 
