@@ -3,16 +3,6 @@ from django.utils import timezone
 
 # Create your models here.
 
-class QuestionTopic(models.Model):
-    QuestionTopic = models.TextField(null=False)
-    def __unicode__(self):
-        return u'{0}'.format(self.QuestionTopic)
-
-class Answer(models.Model):
-    Answer = models.TextField(null=False)
-    Letter = models.TextField(max_length=1,null=False)
-    def  __unicode__(self):
-        return u'{0}'.format(self.Answer)
 
 class Question(models.Model):
     Question = models.TextField(null=False)

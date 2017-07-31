@@ -10,8 +10,8 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.core import serializers
 
-from models import LastQuestion, QuestionTopic
-from models import Question
+from models import LastQuestion,Question
+
 
 
 def create_webhook_answer(answer):
@@ -29,9 +29,8 @@ def checkQuestion(optionChoosed):
 
 
 def chooseQuestionByTopic(topic):
-    questionTopic = QuestionTopic.objects.filter(topic=topic)[0]
     questionsByTopic = Question.objects.filter(
-        questionTopic=questionTopic).order_by('id')
+        questionTopic=topic).order_by('id')
     question = questionsByTopic[random.randint(0, len(questionsByTopic) - 1)]
     return question.generateSpeech()
 
