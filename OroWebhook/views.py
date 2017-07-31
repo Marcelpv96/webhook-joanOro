@@ -34,13 +34,14 @@ def chooseQuestionByTopic(topic):
     questionsByTopic = Question.objects.filter(
         questionTopic=topic).order_by('id')
     question = questionsByTopic[random.randint(0, len(questionsByTopic) - 1)]
-    return "holagolagola"
 
 
 def generateQuestionChoosedTest(topic):
     questionGenerated = chooseQuestionByTopic(topic)
+    """
     lastQuestion = LastQuestion(question=questionGenerated)
     lastQuestion.save()
+    """
     return create_webhook_answer(questionGenerated)
 
 
