@@ -1,5 +1,6 @@
 import copy
 import json
+import random
 import datetime
 import random
 from django.utils import timezone
@@ -9,10 +10,11 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.core import serializers
 
-from models import LastQuestion
+from models import LastQuestion, QuestionTopic
+from models import Question
 
 
-def create_answer(answer):
+def create_webhook_answer(answer):
     return {
         "speech": answer,
         "displayText": answer,
@@ -26,48 +28,50 @@ def checkQuestion(optionChoosed):
     return lastQuestion.correct() == optionChoosed
 
 
-def genetareQuestion(topic):
-    return create_answer('QUESTION :' + topic)
+def chooseQuestionByTopic(topic):
+    questionTopic = QuestionTopic.objects.filter(topic=topic)[0]
+    questionsByTopic = Question.objects.filter(
+        questionTopic=questionTopic).order_by('id')
+    question = questionsByTopic[random.randint(0, len(questionsByTopic) - 1)]
+    return question
 
 
-def generateQuestionChoosedTest(action):
-    return genetareQuestion('action')
+def generateQuestionChoosedTest(topic):
+    questionGenerated = generateQuestion(topic)
+    lastQuestion = LastQuestion(question=questionGenerated)
+    lastQuestion.save()
+    return create_webhook_answer(questionGenerated)
 
 
-def generateQuestion(topic):
-    if checkQuestion():
+def generateQuestion(topic,optionChoosed ):
+    if checkQuestion(optionChoosed):
         result = 'Correct Answer, now the question is : '
-        questionGenerated = generateQuestion(topic)
-        lastQuestion = LastQuestion(question=questionGenerated)
     else:
         result = 'Incorrect Answer, now the question i : '
+    questionGenerated = generateQuestion(topic)
+    lastQuestion = LastQuestion(question=questionGenerated)
+    lastQuestion.save()
 
-    return create_answer(result + ' ...')
+    return create_webhook_answer(result + questionGenerated)
 
 
-def getResult(action):
+def getResult(action, optionChoosed):
     try:
         if action.split('_')[0] == 'start':
-            result = create_answer(
+            result = create_webhook_answer(
                 "Choose the test, say a topic or say Random for a random test.")
         if action.split('_')[0] == 'test':
             result = generateQuestionChoosedTest(action.split('_')[-1])
         if action.split('_')[0] == 'answer':
-            result = generateQuestion(action.split('_')[-1])
+            result = generateQuestion(action.split('_')[-1],optionChoosed)
     except:
-        result = create_answer("ERRROR")
+        result = create_webhook_answer("ERRROR")
     return result
 
 
 def userChoosed(request_data):
     user_answered = request_data['result']['resolvedQuery'].split()
-    if 'A' in user_answered:
-        return 'A'
-    if 'B' in user_answered:
-        return 'B'
-    if 'C' in user_answered:
-        return 'C'
-    return 'NO ANSWER'
+    return user_answered
 
 
 @csrf_exempt
@@ -76,5 +80,5 @@ def webhook(request):
     request_data = json.loads(request.body)
     action = request_data['result']['action']
     optionChoosed = userChoosed(request_data)
-    result = getResult(action)
+    result = getResult(action, optionChoosed)
     return JsonResponse(result)
