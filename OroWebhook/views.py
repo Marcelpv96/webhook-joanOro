@@ -32,7 +32,7 @@ def chooseQuestionByTopic(topic):
     questionsByTopic = Question.objects.filter(
         questionTopic=topic).order_by('id')
     question = questionsByTopic[random.randint(0, len(questionsByTopic) - 1)]
-    return question.generateSpeech()
+    return "holagolagola"
 
 
 def generateQuestionChoosedTest(topic):
