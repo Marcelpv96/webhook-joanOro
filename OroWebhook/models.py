@@ -16,11 +16,11 @@ class Answer(models.Model):
 
 class Question(models.Model):
     Question = models.TextField(null=False)
-    AnswerA = models.ForeignKey(Answer,related_name="answer_a",null=False)
-    AnswerB = models.ForeignKey(Answer,related_name="answer_b",null=False)
-    AnswerC = models.ForeignKey(Answer,related_name="answer_c",null=False)
+    AnswerA = models.TextField(null=False)
+    AnswerB = models.TextField(null=False)
+    AnswerC = models.TextField(null=False)
     Correct = models.TextField(null=False)
-    QuestionTopic = models.ForeignKey(QuestionTopic,null=False)
+    QuestionTopic = models.TextField(null=False)
 
     def generateSpeech(self):
         return "The question is :"+self.Question+" options:"+self.AnswerA+" "+self.AnswerB+" "+self.AnswerC
