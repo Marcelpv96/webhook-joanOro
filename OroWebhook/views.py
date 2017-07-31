@@ -36,11 +36,10 @@ def chooseQuestionByTopic(topic):
 
 
 def generateQuestionChoosedTest(topic):
-    #questionGenerated = generateQuestion(topic)
-    return create_webhook_answer(topic)
+    questionGenerated = chooseQuestionByTopic(topic)
     lastQuestion = LastQuestion(question=questionGenerated)
     lastQuestion.save()
-
+    return questionGenerated
 
 
 def generateQuestion(topic,optionChoosed ):
@@ -48,7 +47,7 @@ def generateQuestion(topic,optionChoosed ):
         result = 'Correct Answer, now the question is : '
     else:
         result = 'Incorrect Answer, now the question i : '
-    questionGenerated = generateQuestion(topic)
+    questionGenerated = chooseQuestionByTopic(topic)
     lastQuestion = LastQuestion(question=questionGenerated)
     lastQuestion.save()
 
