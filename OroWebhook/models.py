@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-
 # Create your models here.
 
 
@@ -12,11 +11,8 @@ class Question(models.Model):
     Correct = models.TextField(null=False)
     QuestionTopic = models.TextField(null=False)
 
-    def generateSpeech(self):
-        return "The question is :"+self.Question+" options:"+self.AnswerA+" "+self.AnswerB+" "+self.AnswerC
-
     def __unicode__(self):
-        return u'{0}'.format(self.Question+" |a,b,c| "+self.QuestionTopic)
+        return u'{0}'.format("the question is: "+self.Question+" |a,b,c| "+self.QuestionTopic)
 
 class APIAIanswer(models.Model):
     question = models.ForeignKey(Question,null=False)
@@ -29,7 +25,11 @@ class APIAIanswer(models.Model):
 
 class LastQuestion(models.Model):
     question = models.ForeignKey(Question,null=False)
+
     def correct(self):
-        return self.question.Correct
+        return str(self.question.Correct)
+
+    def __str__(self):
+        return u'{0}'.format(self.question.Question+" |Correct answer >>| ")
     def __unicode__(self):
         return u'{0}'.format(self.question.Question+" |Correct answer >>| ")
