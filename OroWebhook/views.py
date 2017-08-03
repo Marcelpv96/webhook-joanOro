@@ -17,17 +17,16 @@ def createWebhookAnswer(answer):
 
 
 def JSONtoQuestion(jsonData):
-    question = jsonData['Question']
-    A = jsonData['AnswerA']
-    B = jsonData['AnswerB']
-    C = jsonData['AnswerC']
-    return "The question is " + question + " Option A " + A + " Option B " + B + " or Option C " + C
+    return "The question is " + jsonData['Question'] \
+        + ", Option A " + jsonData['AnswerA'] \
+        + ", Option B " + jsonData['AnswerB'] \
+        + ", or Option C " + jsonData['AnswerC']
 
 
-def checkQuestion(optionChoosed):
+def checkQuestion():
     lastQuestion = LastQuestion.objects.order_by('-id')[0]
     LastQuestion.objects.order_by('-id')[0].delete()
-    return lastQuestion.correct() == optionChoosed
+    return lastQuestion.correct()
 
 
 def chooseQuestionByTopic(topic):
@@ -49,22 +48,20 @@ def generateQuestionChoosedTest(topic):
 
 
 def generateQuestion(topic, optionChoosed):
-    if checkQuestion(optionChoosed):
-        result = 'Correct Answer, now the question is : '
+    LastQuestion = checkQuestion()
+    if LastQuestion == optionChoosed:
+        result = 'Correct Answer now  '
     else:
-        result = 'Incorrect Answer, now the question i : '
-
-    print topic
+        result = 'Incorrect Answer, the correct was ' + LastQuestion + ' now   '
     questionGenerated = chooseQuestionByTopic(topic)
-    print questionGenerated
     return createWebhookAnswer(result + questionGenerated)
 
 
-def getAction(action, optionChoosed):
+def generateResultAnswer(action, optionChoosed):
     result = createWebhookAnswer("ERRROR")
     if action.split('_')[0] == 'start':
         result = createWebhookAnswer(
-            "Choose the test, say a topic or say Random for a random test.")
+            "Ok, Say a topic for start with the Questions, If you don't know which topics are available say Topic List for more information.")
     if action.split('_')[0] == 'test':
         result = generateQuestionChoosedTest(action.split('_')[-1])
     if action.split('_')[0] == 'answer':
