@@ -1,6 +1,9 @@
 import json
 import random
 from models import LastQuestion, Question
+from wordsLanguages import words
+
+language = "English"
 
 
 def createWebhookAnswer(answer):
@@ -12,10 +15,10 @@ def createWebhookAnswer(answer):
 
 
 def JSONtoQuestion(jsonData):
-    return "The question is " + jsonData['Question'] \
-        + ", Option A " + jsonData['AnswerA'] \
-        + ", Option B " + jsonData['AnswerB'] \
-        + ", or Option C " + jsonData['AnswerC']
+    return words[language]["Question"] + jsonData['Question'] \
+        + words[language]["OptionA"] + jsonData['AnswerA'] \
+        + words[language]["OptionB"] + jsonData['AnswerB'] \
+        + words[language]["OptionC"] + jsonData['AnswerC']
 
 
 def checkQuestion():
@@ -45,9 +48,10 @@ def generateQuestionChoosedTest(topic):
 def generateQuestion(topic, optionChoosed):
     LastQuestionAnswer = checkQuestion()
     if LastQuestionAnswer == optionChoosed:
-        result = 'Correct Answer now  '
+        result = words[language]["Correct"]
     else:
-        result = 'Incorrect Answer, the correct was ' + LastQuestionAnswer + ' now '
+        result = words[language]["Incorrect"][0] + \
+            LastQuestionAnswer + words[language]["Incorrect"][1]
 
     print topic
     questionGenerated = chooseQuestionByTopic(topic)
@@ -58,8 +62,7 @@ def generateQuestion(topic, optionChoosed):
 def getAction(action, optionChoosed):
     result = createWebhookAnswer("ERRROR")
     if action.split('_')[0] == 'start':
-        result = createWebhookAnswer(
-            "Ok, Say a topic for start with the Questions, If you don't know which topics are available say Topic List for more information.")
+        result = createWebhookAnswer(words[language]["Starting"])
     if action.split('_')[0] == 'test':
         result = generateQuestionChoosedTest(action.split('_')[-1])
     if action.split('_')[0] == 'answer':

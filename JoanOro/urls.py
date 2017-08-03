@@ -18,5 +18,7 @@ from OroWebhook import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^webhook', views.webhook, name='webhook'),
+    url(r'^webhookOro', views.webhookOro, name='webhookOro'),
+    url(r'^webhookSalamanca', views.webhookSalamanca, name='webhookSalamanca'),
+
 ]
