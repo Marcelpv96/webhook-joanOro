@@ -15,12 +15,14 @@ def createWebhookAnswer(answer):
         "source": "API.AI-test-simple-Quiz"
     }
 
+
 def JSONtoQuestion(jsonData):
     question = jsonData['Question']
     A = jsonData['AnswerA']
     B = jsonData['AnswerB']
     C = jsonData['AnswerC']
-    return "The question is " +question+" Option A "+A+" Option B "+B+" or Option C "+C
+    return "The question is " + question + " Option A " + A + " Option B " + B + " or Option C " + C
+
 
 def checkQuestion(optionChoosed):
     lastQuestion = LastQuestion.objects.order_by('-id')[0]
@@ -29,10 +31,12 @@ def checkQuestion(optionChoosed):
 
 
 def chooseQuestionByTopic(topic):
-    n = random.randint(0,Question.objects.filter(QuestionTopic=topic).count()-1)
+    n = random.randint(0, Question.objects.filter(
+        QuestionTopic=topic).count() - 1)
     questionByTopicValues = Question.objects.filter(
         QuestionTopic=topic).order_by('id').values()
-    questionByTopic = Question.objects.filter(QuestionTopic=topic).order_by('id')[n]
+    questionByTopic = Question.objects.filter(
+        QuestionTopic=topic).order_by('id')[n]
     question = LastQuestion(question=questionByTopic)
     question.save()
     questionValue = JSONtoQuestion(questionByTopicValues[n])
