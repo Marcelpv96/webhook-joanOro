@@ -3,7 +3,7 @@ import random
 from models import LastQuestion, Question
 from wordsLanguages import words
 
-language = "English"
+language = "Spanish"
 
 
 def createWebhookAnswer(answer):
