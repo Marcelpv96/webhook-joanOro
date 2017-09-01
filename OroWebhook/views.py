@@ -22,7 +22,7 @@ def webhookOro(request):
 def webhookSalamanca(request):
     request_data = json.loads(request.body)
     action = request_data['result']['action']
-    quiz.language = "Spanish"
+    quiz.language = "English"
     optionChoosed = quiz.userChoosed(request_data)
     result = quiz.getAction(action, optionChoosed)
     return JsonResponse(result)

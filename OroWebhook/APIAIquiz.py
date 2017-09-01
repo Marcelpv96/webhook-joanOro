@@ -20,10 +20,13 @@ def JSONtoQuestion(jsonData):
         + words[language]["OptionB"] + jsonData['AnswerB'] \
         + words[language]["OptionC"] + jsonData['AnswerC']
 
-
+def questionToString(question):
+    return words[language]["Question"] + question.Question \
+        + words[language]["OptionA"] + question.AnswerA \
+        + words[language]["OptionB"] + question.AnswerB \
+        + words[language]["OptionC"] + question.AnswerC
 def checkQuestion():
     lastQuestion = LastQuestion.objects.order_by('-id')[0]
-    LastQuestion.objects.order_by('-id')[0].delete()
     return lastQuestion.correct()
 
 
@@ -34,7 +37,8 @@ def chooseQuestionByTopic(topic):
         QuestionTopic=topic).order_by('id').values()
     questionByTopic = Question.objects.filter(
         QuestionTopic=topic).order_by('id')[n]
-    question = LastQuestion(question=questionByTopic)
+    LastQuestion.objects.order_by('-id')[0].delete()
+    question = LastQuestion(question=questionByTopic,tries="0")
     question.save()
     questionValue = JSONtoQuestion(questionByTopicValues[n])
     return questionValue
@@ -46,15 +50,25 @@ def generateQuestionChoosedTest(topic):
 
 
 def generateQuestion(topic, optionChoosed):
+    tries = LastQuestion.objects.order_by('-id')[0].tries
+    print tries
     LastQuestionAnswer = checkQuestion()
     if LastQuestionAnswer == optionChoosed:
         result = words[language]["Correct"]
-    else:
+        questionGenerated = chooseQuestionByTopic(topic)
+    elif tries == "0":
+        result = "Incorrect answer ,another try ,"
+        questionGenerated= questionToString(LastQuestion.objects.order_by('-id')[0].question)
+        q = LastQuestion(question=LastQuestion.objects.order_by('-id')[0].question,tries="1")
+        q.save()
+        tries = LastQuestion.objects.order_by('-id')[0].tries
+        print tries
+
+    elif tries == "1":
         result = words[language]["Incorrect"][0] + \
             LastQuestionAnswer + words[language]["Incorrect"][1]
+        questionGenerated = chooseQuestionByTopic(topic)
 
-    print topic
-    questionGenerated = chooseQuestionByTopic(topic)
     print questionGenerated
     return createWebhookAnswer(result + questionGenerated)
 

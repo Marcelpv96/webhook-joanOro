@@ -25,6 +25,7 @@ class APIAIanswer(models.Model):
 
 class LastQuestion(models.Model):
     question = models.ForeignKey(Question,null=False)
+    tries = models.TextField(null=False,default="0")
 
     def correct(self):
         return str(self.question.Correct)
@@ -33,3 +34,4 @@ class LastQuestion(models.Model):
         return u'{0}'.format(self.question.Question+" |Correct answer >>| ")
     def __unicode__(self):
         return u'{0}'.format(self.question.Question+" |Correct answer >>| ")
+
