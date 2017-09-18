@@ -52,7 +52,7 @@ def generateQuestionChoosedTest(topic):
 def generateQuestion(topic, optionChoosed):
     tries = LastQuestion.objects.order_by('-id')[0].tries
     LastQuestionAnswer = checkQuestion()
-    if LastQuestionAnswer.split(',')[0] == optionChoosed:
+    if LastQuestionAnswer.split(',')[0] == optionChoosed.upper():
         result = words[language]["Correct"]
         questionGenerated = chooseQuestionByTopic(topic)
     elif tries == "0":
