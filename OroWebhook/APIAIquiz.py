@@ -51,9 +51,7 @@ def generateQuestionChoosedTest(topic):
 
 def generateQuestion(topic, optionChoosed):
     tries = LastQuestion.objects.order_by('-id')[0].tries
-    print tries
     LastQuestionAnswer = checkQuestion()
-    print LastQuestionAnswer
     if LastQuestionAnswer == optionChoosed:
         result = words[language]["Correct"]
         questionGenerated = chooseQuestionByTopic(topic)
@@ -63,14 +61,12 @@ def generateQuestion(topic, optionChoosed):
         q = LastQuestion(question=LastQuestion.objects.order_by('-id')[0].question,tries="1")
         q.save()
         tries = LastQuestion.objects.order_by('-id')[0].tries
-        print tries
 
     elif tries == "1":
         result = words[language]["Incorrect"][0] + \
             LastQuestionAnswer + words[language]["Incorrect"][1]
         questionGenerated = chooseQuestionByTopic(topic)
 
-    print questionGenerated
     return createWebhookAnswer(result + questionGenerated)
 
 
