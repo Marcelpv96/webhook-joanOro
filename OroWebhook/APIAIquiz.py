@@ -27,7 +27,7 @@ def questionToString(question):
         + words[language]["OptionC"] + question.AnswerC
 def checkQuestion():
     lastQuestion = LastQuestion.objects.order_by('-id')[0]
-    return lastQuestion.correct()
+    return lastQuestion.correct().split(',')[0]
 
 
 def chooseQuestionByTopic(topic):
@@ -53,11 +53,12 @@ def generateQuestion(topic, optionChoosed):
     tries = LastQuestion.objects.order_by('-id')[0].tries
     print tries
     LastQuestionAnswer = checkQuestion()
+    print LastQuestionAnswer
     if LastQuestionAnswer == optionChoosed:
         result = words[language]["Correct"]
         questionGenerated = chooseQuestionByTopic(topic)
     elif tries == "0":
-        result = "Incorrect answer ,another try ,"
+        result = "Incorrect answer, another try. "
         questionGenerated= questionToString(LastQuestion.objects.order_by('-id')[0].question)
         q = LastQuestion(question=LastQuestion.objects.order_by('-id')[0].question,tries="1")
         q.save()
